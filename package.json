@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
+    "prepare": "node scripts/build.mjs",
     "test": "node tests/api-surface.test.mjs",
     "check": "node tests/api-surface.test.mjs",
     "docs": "node scripts/generate-skill-docs.mjs"
