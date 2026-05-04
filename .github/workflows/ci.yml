@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm run build
+      - run: npm test
+      - name: Verify dist/ matches src/
+        run: |
+          diff -q src/erpai-pages-runtime.js dist/erpai-pages-runtime.js
+          diff -q src/erpai-pages-runtime.css dist/erpai-pages-runtime.css
+          test -s dist/erpai-pages-runtime.d.ts
+          test -s dist/runtime.md
