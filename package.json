@@ -34,7 +34,6 @@
     "agent-generated"
   ],
   "license": "UNLICENSED",
-  "private": true,
   "engines": {
     "node": ">=18"
   }
