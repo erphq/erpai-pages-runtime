@@ -51,7 +51,7 @@ Full reference: [`dist/runtime.md`](./dist/runtime.md) (regenerated on every bui
 
 ## Install
 
-This is a private package; consumers install via git URL pinned to a tag:
+This package isn't published to npm; consumers install via git URL pinned to a tag:
 
 ```jsonc
 // package.json
