@@ -104,6 +104,7 @@ const EXPECTED_API = [
   ['initTabs',         'function'],
   ['openRecord',       'function'],
   ['openCreateForm',   'function'],
+  ['openImport',       'function'],
 
   // Charts / prefetch
   ['chart',            'object'],

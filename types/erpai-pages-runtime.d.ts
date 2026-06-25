@@ -102,6 +102,13 @@ export interface RecordModalOpts {
   initialData?: Record<string, unknown>;
 }
 
+export interface ImportWizardOpts {
+  /** Fires after a successful import. */
+  onComplete?: (tableId: string, info: { importLogId: string }) => void;
+  /** Fires when the wizard is dismissed without importing. */
+  onClose?: () => void;
+}
+
 export interface PermissionDeniedOpts {
   message?: string;
   resource?: string;
@@ -251,6 +258,8 @@ export interface ErpaiRuntime {
   openRecord(tableId: string, recordId: string, opts?: RecordModalOpts): void;
   /** Open the record-create modal in the parent app shell. */
   openCreateForm(tableId: string, opts?: RecordModalOpts): void;
+  /** Open the data import wizard (CSV/Excel) in the parent app shell. Omit tableId to let the user pick or create a table. */
+  openImport(tableId?: string, opts?: ImportWizardOpts): void;
 
   // ── Charts (helpers; bring your own Chart.js) ────────────────────────
   chart: {

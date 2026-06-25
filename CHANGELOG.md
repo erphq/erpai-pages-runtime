@@ -2,6 +2,11 @@
 
 All notable changes to `@erpai/pages-runtime`. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning: [SemVer](https://semver.org/).
 
+## [2.3.0] — 2026-06-25
+
+### Added
+- `erpai.openImport(tableId?, { onComplete?, onClose? })` — opens the real ERPAI ImportWizard (CSV/Excel upload, column mapping, type detection, create-new-table) via the parent-frame bridge. Omit `tableId` to let the user pick a table or create a new one. `onComplete(tableId, { importLogId })` fires after a successful import; `onClose()` on dismiss. Falls back to navigating to the table in standalone/local-preview mode. Pairs with the `ERPAI_OPEN_IMPORT` → `ERPAI_IMPORT_COMPLETE`/`ERPAI_IMPORT_CLOSED` host handler in erpai-ui.
+
 ## [2.2.0] — 2026-05-04
 
 First standalone release. Code extracted from `erpai-ui/public/runtime/` into a dedicated repo with types, generated docs, and an API-surface CI check.

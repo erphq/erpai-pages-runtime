@@ -1253,6 +1253,29 @@
     window.addEventListener('message', _bridgeHandler);
   }
 
+  /** Active import-bridge listener — only one at a time */
+  var _importBridgeHandler = null;
+
+  function listenForImportBridgeResponse(opts) {
+    // Remove previous listener if any
+    if (_importBridgeHandler) {
+      window.removeEventListener('message', _importBridgeHandler);
+      _importBridgeHandler = null;
+    }
+    _importBridgeHandler = function (event) {
+      var msg = event.data;
+      if (!msg || typeof msg !== 'object') return;
+      if (msg.type === 'ERPAI_IMPORT_COMPLETE') {
+        if (opts.onComplete) opts.onComplete(msg.tableId || '', { importLogId: msg.importLogId || '' });
+      } else if (msg.type === 'ERPAI_IMPORT_CLOSED') {
+        window.removeEventListener('message', _importBridgeHandler);
+        _importBridgeHandler = null;
+        if (opts.onClose) opts.onClose();
+      }
+    };
+    window.addEventListener('message', _importBridgeHandler);
+  }
+
   /**
    * Open a record for viewing/editing.
    * In production (iframe): sends postMessage to parent, which renders the real AddRecordPopup.
@@ -1302,6 +1325,30 @@
 
     // Fallback: navigate to the table in ERPAI UI
     navigateTo('/table/' + tableId);
+  }
+
+  /**
+   * Open the data import wizard.
+   * In production (iframe): sends postMessage to parent, which renders the real ImportWizard
+   * (CSV/Excel upload, column mapping, type detection, create-new-table).
+   * In local testing (standalone): navigates to the table in the ERPAI UI.
+   * @param {string} [tableId] - Target table ID. Omit to let the user pick a table or create a new one.
+   * @param {object} [opts] - Options: { onComplete, onClose }
+   */
+  function openImport(tableId, opts) {
+    if (!opts) opts = {};
+
+    if (isInIframe()) {
+      window.parent.postMessage({
+        type: 'ERPAI_OPEN_IMPORT',
+        tableId: tableId || ''
+      }, '*');
+      listenForImportBridgeResponse(opts);
+      return;
+    }
+
+    // Fallback: navigate to the table in ERPAI UI (import isn't available standalone)
+    if (tableId) navigateTo('/table/' + tableId);
   }
 
   // ===== Fallback Record Modal (for local testing only) =====
@@ -1940,6 +1987,7 @@
     // Record modal (bridge to parent in iframe, fallback modal for local testing)
     openRecord: openRecord,
     openCreateForm: openCreateForm,
+    openImport: openImport,
 
     // Charts
     chart: chart,
