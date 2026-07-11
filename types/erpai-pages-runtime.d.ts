@@ -26,6 +26,11 @@ export interface ErpaiBootConfig {
   branchId?: string;
   orgName?: string;
   appName?: string;
+  appRouteBase?: string;
+  routeBase?: string;
+  pageSlug?: string;
+  pageId?: string;
+  timeZone?: string;
   theme?: 'light' | 'dark' | 'system';
 }
 
@@ -39,6 +44,75 @@ export interface SQLResult {
 export interface RecordsResult<T = Record<string, unknown>> {
   data: T[];
   totalCount: number;
+}
+
+export interface SummaryFilterCondition {
+  colId?: string;
+  id?: string;
+  columnId?: string;
+  fieldId?: string;
+  field?: string;
+  opr?: string;
+  operator?: string;
+  operation?: string;
+  value?: unknown;
+  isDynamicValue?: boolean;
+  isExternal?: boolean;
+}
+
+export interface SummaryFilter {
+  conditions?: SummaryFilterCondition[];
+  rules?: SummaryFilterCondition[];
+  filterGroups?: SummaryFilter[];
+  groups?: SummaryFilter[];
+  logicalOperator?: 'and' | 'or';
+  condition?: 'and' | 'or';
+  ids?: string[];
+  favorite?: boolean;
+}
+
+export interface AggregateSpec {
+  op: 'count' | 'sum' | 'avg' | 'min' | 'max';
+  columnId?: string;
+  alias: string;
+}
+
+export interface AggregateRecordsOptions {
+  aggregations: AggregateSpec[];
+  groupBy?: string[];
+  filter?: SummaryFilter | { filterCriteria?: SummaryFilter; filter?: SummaryFilter };
+  filterCriteria?: SummaryFilter;
+}
+
+export interface AggregateRecordsResponse {
+  rows: Array<{
+    group?: Record<string, unknown>;
+    values?: Record<string, number | null>;
+    [key: string]: unknown;
+  }>;
+  [key: string]: unknown;
+}
+
+export interface CountRecordsResponse {
+  count: number;
+  [key: string]: unknown;
+}
+
+export interface QueryOptions {
+  staleTtl?: number;
+  maxAge?: number;
+  persist?: boolean;
+  fresh?: boolean;
+  meta?: { tableId?: string; tableIds?: string[]; tags?: string[]; [key: string]: unknown };
+}
+
+export interface QueryResult<T> {
+  data: T;
+  fromCache: boolean;
+  updatedAt: number;
+  refresh(): Promise<QueryResult<T>>;
+  subscribe(callback: (result: QueryResult<T>) => void): () => void;
+  invalidate(): Promise<void>;
 }
 
 export interface TableMeta {
@@ -146,6 +220,9 @@ export interface ErpaiRuntime {
   readonly theme: 'light' | 'dark' | 'system' | undefined;
   readonly orgName: string | undefined;
   readonly appName: string | undefined;
+  readonly appRouteBase: string;
+  readonly pageSlug: string;
+  readonly pageId: string;
 
   // ── API layer ─────────────────────────────────────────────────────────
   /** Low-level fetch wrapper. Sends Authorization + (if set) X-Branch-Id. */
@@ -163,6 +240,14 @@ export interface ErpaiRuntime {
     pageSize?: number,
     filter?: { q?: string; [k: string]: unknown },
   ): Promise<RecordsResult<T>>;
+  /** Server-side KPI/group calculations. Wrap in query() for persistent SWR caching. */
+  aggregateRecords(tableId: string, options: AggregateRecordsOptions): Promise<AggregateRecordsResponse>;
+  /** Server-side filtered count. Wrap in query() for persistent SWR caching. */
+  countRecords(tableId: string, filter?: SummaryFilter): Promise<CountRecordsResponse>;
+  getTableVersions(
+    tableIds: string[],
+    options?: { tags?: string[] },
+  ): Promise<{ tableIds?: string[]; versions: Array<{ tableId: string; version: string }> }>;
   createRecord(tableId: string, cells: Record<string, unknown>): Promise<{ id: string; success: boolean }>;
   updateRecord(tableId: string, recordId: string, cells: Record<string, unknown>): Promise<{ success: boolean }>;
   deleteRecord(tableId: string, recordId: string): Promise<{ success: boolean }>;
@@ -236,6 +321,19 @@ export interface ErpaiRuntime {
   exportCSV(headers: string[], rows: unknown[][], filename?: string): void;
 
   // ── State management ─────────────────────────────────────────────────
+  /** Persistent stale-while-revalidate cache with in-flight deduplication. */
+  query<T>(key: unknown, fetcher: () => Promise<T>, options?: QueryOptions): Promise<QueryResult<T>>;
+  /** Compatibility-only client-side aggregation; prefer aggregateRecords for summaries. */
+  aggregates(
+    tableId: string,
+    options: Record<string, unknown>,
+  ): Promise<Array<Record<string, unknown>>>;
+  records: {
+    page<T = Record<string, unknown>>(tableId: string, options?: Record<string, unknown>): Promise<RecordsResult<T>>;
+    grouped<T = Record<string, unknown>>(tableId: string, options?: Record<string, unknown>): Promise<unknown>;
+    all<T = Record<string, unknown>>(tableId: string, options?: Record<string, unknown>): Promise<RecordsResult<T> & { truncated?: boolean }>;
+    bulkGet<T = Record<string, unknown>>(tableId: string, ids: string[], options?: Record<string, unknown>): Promise<T[]>;
+  };
   /** Client-side memo with TTL. */
   cached<T>(key: string, fetcher: () => Promise<T>, ttl?: number): Promise<T>;
   invalidateCache(keyOrPrefix: string): void;

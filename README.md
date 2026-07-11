@@ -37,7 +37,7 @@ Now there's one source of truth, with:
 
 | Group | Examples |
 |---|---|
-| **API layer** | `runSQL`, `getRecords`, `createRecord`, `updateRecord`, `getTable`, … |
+| **API layer** | `query`, `aggregateRecords`, `countRecords`, `records.*`, `runSQL`, `getRecords`, … |
 | **Formatters** | `compactNumber("1.5M")`, `fmt$`, `fmtPct`, `fmtDate`, `formatCell` |
 | **Cell decoders** | `selectName`, `joinByKey` |
 | **UI helpers** | `createDropdown`, `renderRecordTable`, `renderStatCard`, `renderPagination`, `renderPermissionDenied`, `initTabs` |
@@ -48,6 +48,8 @@ Now there's one source of truth, with:
 | **Navigation** | `erpaiUrl`, `navigateTo` (top-frame nav from inside iframe) |
 
 Full reference: [`dist/runtime.md`](./dist/runtime.md) (regenerated on every build).
+
+For KPI cards and grouped charts, prefer `aggregateRecords()` or `countRecords()` so the database performs the calculation. Wrap the call in `query()` to show persisted data immediately and revalidate it in the background. Keep `aggregates()` only for compatibility or genuinely small client-side datasets.
 
 ## Install
 
@@ -150,6 +152,7 @@ npm run docs        # regenerate dist/runtime.md from JSDoc
 
 | Version | Highlights |
 |---|---|
+| `2.4.0` | Synchronizes the deployed Studio runtime; adds server-side `aggregateRecords`/`countRecords`, persistent query/SWR APIs, and safe filtered-prefetch handling. |
 | `2.2.0` | First standalone release. Adds `compactNumber`, `branchId` export, `X-Branch-Id` header, `--blue` theme token, dropdown CSS, dedup. |
 
 See [`CHANGELOG.md`](./CHANGELOG.md) for full history.

@@ -2,6 +2,18 @@
 
 All notable changes to `@erpai/pages-runtime`. Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), versioning: [SemVer](https://semver.org/).
 
+## [2.4.0] — 2026-07-11
+
+### Added
+- `erpai.aggregateRecords()` and `erpai.countRecords()` for bounded server-side dashboard summaries.
+- The deployed persistent `query`, cached `records.*`, mutation invalidation, state, lifecycle, and keyed-render APIs that had not yet been synchronized back to the standalone package.
+- API contract checks for summary filter normalization, raw request compatibility, branch headers, and query cache behavior.
+
+### Changed
+- Filtered first-page record calls now bypass unfiltered hydrated prefetch data.
+- Server summary POST requests are classified as reads and no longer invalidate runtime caches.
+- `aggregates()` remains available unchanged for compatibility; new dashboards should prefer server-side summaries.
+
 ## [2.3.0] — 2026-06-25
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "@erpai/pages-runtime",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Browser runtime SDK for ERPAI custom HTML pages — the contract between agent-generated pages and the iframe they execute in. Provides the window.erpai namespace: SQL/records API, formatters, dropdowns, table/chart helpers, theme tokens, Tabler icons, and section-loading state.",
   "main": "dist/erpai-pages-runtime.js",
   "types": "dist/erpai-pages-runtime.d.ts",
