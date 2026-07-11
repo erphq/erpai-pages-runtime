@@ -942,3 +942,1694 @@ label {
   color: hsl(var(--muted-foreground));
   text-align: center;
 }
+
+/* Export controls */
+.erpai-export-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.erpai-export-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+}
+.erpai-export-btn:hover:not(:disabled) {
+  background: hsl(var(--accent));
+  border-color: hsl(var(--primary) / 0.35);
+}
+.erpai-export-btn:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.erpai-export-status {
+  margin-top: 6px;
+  min-height: 18px;
+  color: hsl(var(--muted-foreground));
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* ===== PUBLISHED / GENERATED APP PAGES ===== */
+body.catalog-page,
+body.erpai-generated-page {
+  --catalog-page-rail: min(calc(100vw - 32px), 1376px);
+  --catalog-page-copy: min(760px, 100%);
+  --catalog-panel-border: hsl(var(--border) / 0.62);
+  --catalog-card-surface: color-mix(in srgb, hsl(var(--card)) 86%, hsl(var(--background)));
+  --catalog-muted-border: hsl(var(--border) / 0.42);
+  --catalog-nav-width: min(calc(100vw - 32px), 1120px);
+  --catalog-nav-width-scrolled: min(calc(100vw - 32px), 980px);
+  --text-m: hsl(var(--muted-foreground));
+  --font-body: "Geist", "Geist Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Geist", "Geist Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  --org: hsl(var(--destructive));
+  --org-on-light: hsl(var(--destructive));
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-signature: cubic-bezier(0.2, 0, 0.1, 1);
+  --duration-fast: 160ms;
+  --duration-normal: 260ms;
+  --tacet-nav-border-rest: hsl(var(--border) / 0.58);
+  --tacet-nav-border-scrolled: hsl(var(--border) / 0.72);
+  --tacet-nav-panel-rest: hsl(var(--background) / 0.78);
+  --tacet-nav-panel-scrolled: hsl(var(--background) / 0.88);
+  --tacet-nav-shadow-scrolled: 0 22px 56px -44px hsl(var(--foreground) / 0.65);
+  --tacet-nav-bg: radial-gradient(circle at 16% 0%, hsl(var(--primary) / 0.12), transparent 32rem);
+  max-width: none;
+  padding: 0;
+  background:
+    linear-gradient(180deg, hsl(var(--background) / 0.72), hsl(var(--background)) 46rem),
+    radial-gradient(circle at 14% -4%, hsl(var(--primary) / 0.14), transparent 34rem),
+    radial-gradient(circle at 78% 7rem, hsl(var(--chart-2) / 0.12), transparent 28rem),
+    hsl(var(--background));
+}
+
+body.catalog-page .proto-nav,
+body.erpai-generated-page .proto-nav {
+  position: sticky;
+  top: 0;
+  z-index: 80;
+  display: flex;
+  justify-content: center;
+  padding: 12px 16px 0;
+  pointer-events: none;
+}
+
+body.catalog-page .proto-nav__wash,
+body.erpai-generated-page .proto-nav__wash,
+body.catalog-page .proto-nav__bar-wash,
+body.erpai-generated-page .proto-nav__bar-wash {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--tacet-nav-bg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-normal) var(--ease-standard);
+}
+
+body.catalog-page .proto-nav__bar,
+body.erpai-generated-page .proto-nav__bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: var(--catalog-nav-width);
+  min-height: 62px;
+  overflow: hidden;
+  padding: 8px 10px 8px 12px;
+  border: 1px solid var(--tacet-nav-border-rest);
+  border-radius: 10px;
+  background: var(--tacet-nav-panel-rest);
+  color: hsl(var(--foreground));
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: auto;
+  transition:
+    width 0.5s var(--ease-standard),
+    background 0.5s var(--ease-standard),
+    border-color 0.5s var(--ease-standard),
+    box-shadow 0.5s var(--ease-standard),
+    backdrop-filter 0.5s var(--ease-standard);
+}
+
+body.catalog-page .proto-nav[data-scrolled='true'] .proto-nav__bar,
+body.erpai-generated-page .proto-nav[data-scrolled='true'] .proto-nav__bar {
+  width: var(--catalog-nav-width-scrolled);
+  border-color: var(--tacet-nav-border-scrolled);
+  background: var(--tacet-nav-panel-scrolled);
+  box-shadow: var(--tacet-nav-shadow-scrolled);
+  backdrop-filter: blur(16px) grayscale(1%) saturate(180%);
+}
+
+body.catalog-page .proto-nav[data-scrolled='true'] .proto-nav__bar-wash,
+body.erpai-generated-page .proto-nav[data-scrolled='true'] .proto-nav__bar-wash {
+  opacity: 0.55;
+}
+
+body.catalog-page .proto-nav__brand,
+body.erpai-generated-page .proto-nav__brand {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 42px;
+  padding-right: 12px;
+  border-right: 1px solid hsl(var(--border) / 0.64);
+  color: hsl(var(--foreground));
+  text-decoration: none;
+}
+
+body.catalog-page .proto-nav__brand-mark,
+body.erpai-generated-page .proto-nav__brand-mark,
+body.catalog-page .proto-mobile__brand-mark,
+body.erpai-generated-page .proto-mobile__brand-mark,
+body.catalog-page .footer-anchor__brand-mark,
+body.erpai-generated-page .footer-anchor__brand-mark {
+  width: 118px;
+  height: auto;
+  color: currentColor;
+}
+
+body.catalog-page .proto-nav__desktop,
+body.erpai-generated-page .proto-nav__desktop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+body.catalog-page .proto-nav__desktop::-webkit-scrollbar,
+body.erpai-generated-page .proto-nav__desktop::-webkit-scrollbar {
+  display: none;
+}
+
+body.catalog-page .proto-nav__link,
+body.erpai-generated-page .proto-nav__link,
+body.catalog-page .proto-nav__action,
+body.erpai-generated-page .proto-nav__action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 11px;
+  border-radius: 6px;
+  color: hsl(var(--muted-foreground));
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0;
+  text-decoration: none;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+body.catalog-page .proto-nav__link:hover,
+body.erpai-generated-page .proto-nav__link:hover,
+body.catalog-page .proto-nav__link:focus-visible,
+body.erpai-generated-page .proto-nav__link:focus-visible,
+body.catalog-page .proto-nav__action:hover,
+body.erpai-generated-page .proto-nav__action:hover,
+body.catalog-page .proto-nav__action:focus-visible,
+body.erpai-generated-page .proto-nav__action:focus-visible {
+  background: hsl(var(--foreground) / 0.07);
+  color: hsl(var(--foreground));
+}
+
+body.catalog-page .proto-nav__link--current,
+body.erpai-generated-page .proto-nav__link--current {
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+}
+
+body.catalog-page .proto-nav__actions,
+body.erpai-generated-page .proto-nav__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+body.catalog-page .proto-nav__menu-button,
+body.erpai-generated-page .proto-nav__menu-button {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid hsl(var(--border) / 0.72);
+  border-radius: 6px;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+}
+
+body.catalog-page .proto-nav__menu-icon,
+body.erpai-generated-page .proto-nav__menu-icon,
+body.catalog-page .proto-mobile__close-icon,
+body.erpai-generated-page .proto-mobile__close-icon {
+  width: 18px;
+  height: 18px;
+}
+
+body.catalog-page .proto-nav-spacer,
+body.erpai-generated-page .proto-nav-spacer {
+  height: 18px;
+}
+
+body.catalog-page .proto-mobile,
+body.erpai-generated-page .proto-mobile {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: none;
+  padding: 12px;
+  background: hsl(var(--background) / 0.74);
+  backdrop-filter: blur(18px);
+}
+
+body.catalog-page .proto-mobile[data-open='true'],
+body.erpai-generated-page .proto-mobile[data-open='true'] {
+  display: grid;
+}
+
+body.catalog-page .proto-mobile__shell,
+body.erpai-generated-page .proto-mobile__shell {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  width: min(100%, 420px);
+  min-height: min(680px, 100%);
+  margin-left: auto;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border) / 0.64);
+  border-radius: 12px;
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
+  box-shadow: 0 32px 90px -48px hsl(var(--foreground) / 0.72);
+}
+
+body.catalog-page .proto-mobile__header,
+body.erpai-generated-page .proto-mobile__header,
+body.catalog-page .proto-mobile__footer,
+body.erpai-generated-page .proto-mobile__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  border-bottom: 1px solid hsl(var(--border) / 0.48);
+}
+
+body.catalog-page .proto-mobile__footer,
+body.erpai-generated-page .proto-mobile__footer {
+  border-top: 1px solid hsl(var(--border) / 0.48);
+  border-bottom: 0;
+}
+
+body.catalog-page .proto-mobile__close,
+body.erpai-generated-page .proto-mobile__close {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid hsl(var(--border) / 0.64);
+  border-radius: 8px;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  cursor: pointer;
+}
+
+body.catalog-page .proto-mobile__body,
+body.erpai-generated-page .proto-mobile__body {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  overflow-y: auto;
+  padding: 14px;
+}
+
+body.catalog-page .proto-mobile__link,
+body.erpai-generated-page .proto-mobile__link,
+body.catalog-page .proto-mobile__child,
+body.erpai-generated-page .proto-mobile__child,
+body.catalog-page .proto-mobile__cta,
+body.erpai-generated-page .proto-mobile__cta {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  border-radius: 8px;
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 680;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+
+body.catalog-page .proto-mobile__link,
+body.erpai-generated-page .proto-mobile__link {
+  padding: 0 12px;
+}
+
+body.catalog-page .proto-mobile__link:hover,
+body.erpai-generated-page .proto-mobile__link:hover,
+body.catalog-page .proto-mobile__link:focus-visible,
+body.erpai-generated-page .proto-mobile__link:focus-visible,
+body.catalog-page .proto-mobile__link--current,
+body.erpai-generated-page .proto-mobile__link--current,
+body.catalog-page .proto-mobile__child:hover,
+body.erpai-generated-page .proto-mobile__child:hover,
+body.catalog-page .proto-mobile__child:focus-visible,
+body.erpai-generated-page .proto-mobile__child:focus-visible {
+  background: hsl(var(--foreground) / 0.07);
+}
+
+body.catalog-page .proto-mobile__cta,
+body.erpai-generated-page .proto-mobile__cta {
+  justify-content: center;
+  width: 100%;
+  border: 1px solid hsl(var(--border) / 0.72);
+  background: hsl(var(--background));
+}
+
+body.catalog-page .main--full-bleed,
+body.erpai-generated-page .main--full-bleed {
+  width: 100%;
+}
+
+body.catalog-page :is(
+  .app-eyebrow,
+  .app-h1,
+  .app-h2,
+  .section-hero .sh-chip,
+  .app-stat .eyebrow,
+  .catalog-sidebar-list,
+  .pp-card .card-tag,
+  .loop-step .num,
+  .je-chip .je-hd,
+  .je-chip .je-col-hd,
+  .je-chip .je-foot,
+  .mockup-bar,
+  .mockup-status,
+  .mockup-caption,
+  .m-kpi .label,
+  .compare-head .compare-cell,
+  .compare-cell--label,
+  .catalog-card-badge,
+  .hero-secondary,
+  .btn
+),
+body.erpai-generated-page :is(
+  .app-eyebrow,
+  .app-h1,
+  .app-h2,
+  .section-hero .sh-chip,
+  .app-stat .eyebrow,
+  .catalog-sidebar-list,
+  .pp-card .card-tag,
+  .loop-step .num,
+  .je-chip .je-hd,
+  .je-chip .je-col-hd,
+  .je-chip .je-foot,
+  .mockup-bar,
+  .mockup-status,
+  .mockup-caption,
+  .m-kpi .label,
+  .compare-head .compare-cell,
+  .compare-cell--label,
+  .catalog-card-badge,
+  .hero-secondary,
+  .btn
+) {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+body.catalog-page .app-hero,
+body.erpai-generated-page .app-hero {
+  overflow-x: clip;
+  overflow-y: visible;
+  border-bottom: 1px solid var(--catalog-panel-border);
+  background: transparent;
+}
+
+body.catalog-page .app-hero::before,
+body.erpai-generated-page .app-hero::before {
+  opacity: 0.16;
+  mask-image: linear-gradient(180deg, black 0%, transparent 78%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, transparent 78%);
+}
+
+body.catalog-page .app-hero-copy,
+body.erpai-generated-page .app-hero-copy {
+  padding: clamp(3rem, 8vw, 6.5rem) 0 clamp(2rem, 4vw, 3.5rem);
+  text-align: left !important;
+}
+
+body.catalog-page .app-hero-copy-inner,
+body.erpai-generated-page .app-hero-copy-inner {
+  display: grid;
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail);
+  align-items: start !important;
+  justify-items: start !important;
+  gap: clamp(0.95rem, 1.6vw, 1.35rem);
+  margin: 0 auto !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+body.catalog-page .app-hero-copy-inner > *,
+body.erpai-generated-page .app-hero-copy-inner > * {
+  justify-self: start !important;
+}
+
+body.catalog-page .app-hero-copy-inner .app-eyebrow,
+body.erpai-generated-page .app-hero-copy-inner .app-eyebrow,
+body.catalog-page .cta-micro,
+body.erpai-generated-page .cta-micro {
+  display: none !important;
+}
+
+body.catalog-page .app-eyebrow,
+body.erpai-generated-page .app-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: fit-content;
+  color: var(--text-m);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+body.catalog-page .app-eyebrow .dot,
+body.erpai-generated-page .app-eyebrow .dot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: var(--org-on-light);
+}
+
+body.catalog-page .app-h1,
+body.erpai-generated-page .app-h1,
+body.catalog-page .app-h1.app-h1--tight,
+body.erpai-generated-page .app-h1.app-h1--tight {
+  max-width: 13ch;
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: clamp(3rem, 7.4vw, 6.65rem);
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  line-height: 0.9;
+}
+
+body.catalog-page .app-h1 [data-line],
+body.erpai-generated-page .app-h1 [data-line] {
+  display: block;
+}
+
+body.catalog-page .app-h1-accent,
+body.erpai-generated-page .app-h1-accent,
+body.catalog-page .hl-yellow,
+body.erpai-generated-page .hl-yellow {
+  color: var(--org-on-light) !important;
+}
+
+body.catalog-page .hl-yellow,
+body.erpai-generated-page .hl-yellow {
+  background: linear-gradient(
+    180deg,
+    transparent 54%,
+    color-mix(in srgb, var(--org), transparent 78%) 54%
+  ) !important;
+}
+
+body.catalog-page .app-lead,
+body.erpai-generated-page .app-lead,
+body.catalog-page .app-lead.app-lead--tight,
+body.erpai-generated-page .app-lead.app-lead--tight {
+  max-width: var(--catalog-page-copy);
+  margin: 0 !important;
+  color: hsl(var(--muted-foreground));
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.62;
+  text-align: left !important;
+}
+
+body.catalog-page .app-hero-cta,
+body.erpai-generated-page .app-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 0.85rem;
+  margin-top: 8px;
+}
+
+body.catalog-page .app-hero-cta .btn,
+body.erpai-generated-page .app-hero-cta .btn,
+body.catalog-page .btn--primary,
+body.erpai-generated-page .btn--primary,
+body.catalog-page #cta .btn,
+body.erpai-generated-page #cta .btn {
+  min-height: 2.875rem;
+  border: 1px solid hsl(var(--foreground) / 0.18) !important;
+  border-radius: 8px;
+  background: hsl(var(--foreground)) !important;
+  box-shadow: none !important;
+  color: hsl(var(--background)) !important;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard);
+}
+
+body.catalog-page .app-hero-cta .btn:hover,
+body.erpai-generated-page .app-hero-cta .btn:hover,
+body.catalog-page #cta .btn:hover,
+body.erpai-generated-page #cta .btn:hover {
+  transform: translateY(-1px);
+}
+
+body.catalog-page .btn--xl,
+body.erpai-generated-page .btn--xl {
+  padding: 0 18px;
+}
+
+body.catalog-page .hero-secondary,
+body.erpai-generated-page .hero-secondary {
+  min-height: 2.75rem;
+  color: var(--text-m);
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  font-weight: 650 !important;
+  text-decoration: none;
+}
+
+body.catalog-page .app-trust-strip,
+body.erpai-generated-page .app-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px 16px;
+  color: var(--text-m);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+body.catalog-page .catalog-hero-shell,
+body.erpai-generated-page .catalog-hero-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.34fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail);
+  margin: 0 auto;
+  padding: 0 0 clamp(3rem, 6vw, 5rem);
+}
+
+body.catalog-page .catalog-sidebar-shell,
+body.erpai-generated-page .catalog-sidebar-shell,
+body.catalog-page .app-hero-preview,
+body.erpai-generated-page .app-hero-preview {
+  min-width: 0;
+  padding: 0 !important;
+}
+
+body.catalog-page .live-dashboard,
+body.erpai-generated-page .live-dashboard,
+body.catalog-page .mockup,
+body.erpai-generated-page .mockup,
+body.catalog-page .compare-table,
+body.erpai-generated-page .compare-table {
+  overflow: hidden;
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  background: var(--catalog-card-surface);
+  box-shadow: 0 1.25rem 4rem hsl(var(--foreground) / 0.08);
+}
+
+body.catalog-page .catalog-sidebar,
+body.erpai-generated-page .catalog-sidebar {
+  display: grid;
+  gap: 18px;
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  background: color-mix(in srgb, hsl(var(--card)) 82%, hsl(var(--background)));
+  padding: 1.15rem;
+}
+
+body.catalog-page .catalog-sidebar-section + .catalog-sidebar-section,
+body.erpai-generated-page .catalog-sidebar-section + .catalog-sidebar-section {
+  padding-top: 18px;
+  border-top: 1px solid var(--catalog-muted-border);
+}
+
+body.catalog-page .catalog-sidebar-title,
+body.erpai-generated-page .catalog-sidebar-title {
+  margin: 0 0 0.65rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+body.catalog-page .catalog-sidebar-text,
+body.erpai-generated-page .catalog-sidebar-text {
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.9rem;
+  line-height: 1.58;
+}
+
+body.catalog-page .catalog-sidebar-list,
+body.erpai-generated-page .catalog-sidebar-list {
+  display: grid;
+  gap: 0;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--catalog-panel-border);
+  list-style: none;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+}
+
+body.catalog-page .catalog-sidebar-list li,
+body.erpai-generated-page .catalog-sidebar-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--catalog-panel-border);
+  color: hsl(var(--muted-foreground));
+}
+
+body.catalog-page .catalog-sidebar-list strong,
+body.erpai-generated-page .catalog-sidebar-list strong {
+  color: hsl(var(--foreground));
+  font-weight: 720;
+  text-align: right;
+}
+
+body.catalog-page .catalog-contributors,
+body.erpai-generated-page .catalog-contributors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+body.catalog-page .catalog-contributor-avatar,
+body.erpai-generated-page .catalog-contributor-avatar {
+  display: inline-flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid var(--catalog-muted-border);
+  border-radius: 8px;
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
+  font-size: 13px;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+body.catalog-page .app-stats,
+body.erpai-generated-page .app-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail);
+  margin: clamp(1.5rem, 3vw, 2.25rem) auto;
+  overflow: hidden;
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  background: var(--catalog-card-surface);
+}
+
+body.catalog-page .app-stat,
+body.erpai-generated-page .app-stat {
+  display: grid;
+  min-height: 0;
+  gap: 0.45rem;
+  padding: 1.05rem;
+  border-right: 1px solid var(--catalog-panel-border);
+}
+
+body.catalog-page .app-stat:last-child,
+body.erpai-generated-page .app-stat:last-child {
+  border-right: 0;
+}
+
+body.catalog-page .app-stat .eyebrow,
+body.erpai-generated-page .app-stat .eyebrow,
+body.catalog-page .app-stat .sub,
+body.erpai-generated-page .app-stat .sub {
+  color: var(--text-m);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+body.catalog-page .app-stat .eyebrow::before,
+body.erpai-generated-page .app-stat .eyebrow::before,
+body.catalog-page .app-stat .mark,
+body.erpai-generated-page .app-stat .mark,
+body.catalog-page .app-stat .ticks,
+body.erpai-generated-page .app-stat .ticks,
+body.catalog-page .app-stat .v::before,
+body.erpai-generated-page .app-stat .v::before {
+  display: none;
+}
+
+body.catalog-page .app-stat .v,
+body.erpai-generated-page .app-stat .v {
+  padding: 0;
+  color: hsl(var(--foreground));
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  font-weight: 760;
+  line-height: 0.96;
+}
+
+body.catalog-page .app-stat .l,
+body.erpai-generated-page .app-stat .l {
+  color: hsl(var(--foreground));
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+body.catalog-page .app-section,
+body.erpai-generated-page .app-section {
+  border-top: 1px solid var(--catalog-panel-border);
+  background: hsl(var(--background));
+  padding: clamp(52px, 8vw, 92px) 0;
+}
+
+body.catalog-page .app-bg-paper,
+body.erpai-generated-page .app-bg-paper,
+body.catalog-page .app-bg-dim,
+body.erpai-generated-page .app-bg-dim,
+body.catalog-page .app-bg-warm,
+body.erpai-generated-page .app-bg-warm,
+body.catalog-page .app-bg-cream,
+body.erpai-generated-page .app-bg-cream,
+body.catalog-page .app-bg-grid,
+body.erpai-generated-page .app-bg-grid,
+body.catalog-page .app-bg-hatch,
+body.erpai-generated-page .app-bg-hatch {
+  background: linear-gradient(180deg, hsl(var(--background)), hsl(var(--background))) !important;
+  background-image: none !important;
+}
+
+body.catalog-page .app-section > div,
+body.erpai-generated-page .app-section > div,
+body.catalog-page .section-hero,
+body.erpai-generated-page .section-hero {
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail);
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+body.catalog-page .section-hero,
+body.erpai-generated-page .section-hero {
+  display: grid;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  text-align: left;
+}
+
+body.catalog-page .section-hero .sh-chip,
+body.erpai-generated-page .section-hero .sh-chip,
+body.catalog-page .section-hero .sh-chip .sh-num,
+body.erpai-generated-page .section-hero .sh-chip .sh-num {
+  display: none;
+}
+
+body.catalog-page .section-hero .app-h2,
+body.erpai-generated-page .section-hero .app-h2,
+body.catalog-page .app-h2,
+body.erpai-generated-page .app-h2 {
+  max-width: 18ch;
+  margin: 0;
+  color: hsl(var(--foreground));
+  font-size: clamp(1.7rem, 3vw, 2.55rem);
+  font-weight: 740;
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+}
+
+body.catalog-page .section-hero .app-italic,
+body.erpai-generated-page .section-hero .app-italic,
+body.catalog-page .app-italic,
+body.erpai-generated-page .app-italic {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--text-m);
+  font-size: clamp(0.98rem, 1.25vw, 1.08rem);
+  font-style: normal;
+  line-height: 1.58;
+}
+
+body.catalog-page .grid-cards,
+body.erpai-generated-page .grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(0.75rem, 1.6vw, 1rem);
+  border: 0;
+}
+
+body.catalog-page .pp-card,
+body.erpai-generated-page .pp-card,
+body.catalog-page details.faq-item,
+body.erpai-generated-page details.faq-item {
+  min-width: 0;
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  background: var(--catalog-card-surface);
+  padding: clamp(1rem, 2vw, 1.2rem);
+  box-shadow: 0 0.75rem 2rem hsl(var(--foreground) / 0.04);
+}
+
+body.catalog-page .pp-card[data-icon],
+body.erpai-generated-page .pp-card[data-icon] {
+  padding-top: clamp(1rem, 2vw, 1.2rem);
+}
+
+body.catalog-page .pp-card[data-icon]::before,
+body.erpai-generated-page .pp-card[data-icon]::before {
+  position: static;
+  width: fit-content;
+  margin-bottom: 0.8rem;
+  border-radius: 4px;
+  background: hsl(var(--destructive) / 0.1);
+  color: var(--org-on-light);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0;
+}
+
+body.catalog-page .pp-card .card-tag,
+body.erpai-generated-page .pp-card .card-tag {
+  margin-bottom: 0.5rem;
+  color: var(--text-m) !important;
+  font-size: 0.78rem !important;
+  font-weight: 650;
+}
+
+body.catalog-page .pp-card .card-title,
+body.erpai-generated-page .pp-card .card-title,
+body.catalog-page .loop-step .body h3,
+body.erpai-generated-page .loop-step .body h3,
+body.catalog-page .loop-step .body h4,
+body.erpai-generated-page .loop-step .body h4 {
+  margin: 0 0 0.55rem;
+  color: hsl(var(--foreground));
+  font-size: clamp(1rem, 1.3vw, 1.16rem);
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+body.catalog-page .pp-card .card-body,
+body.erpai-generated-page .pp-card .card-body,
+body.catalog-page .loop-step .body p,
+body.erpai-generated-page .loop-step .body p,
+body.catalog-page details.faq-item p,
+body.erpai-generated-page details.faq-item p {
+  color: var(--text-m);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+body.catalog-page .card-divider,
+body.erpai-generated-page .card-divider {
+  display: none;
+}
+
+body.catalog-page .loop-step,
+body.erpai-generated-page .loop-step {
+  display: grid;
+  grid-template-columns: minmax(3rem, 0.12fr) minmax(0, 0.5fr) minmax(16rem, 0.38fr);
+  gap: clamp(1rem, 2.5vw, 2.25rem);
+  padding: clamp(1.2rem, 2.5vw, 1.85rem) 0;
+  border-top: 1px solid var(--catalog-panel-border);
+}
+
+body.catalog-page .loop-step .num,
+body.erpai-generated-page .loop-step .num {
+  color: var(--org-on-light);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 740;
+}
+
+body.catalog-page [data-section='process'] .section-hero,
+body.erpai-generated-page [data-section='process'] .section-hero {
+  align-items: start;
+  max-width: 58rem;
+  margin: 0;
+  padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  text-align: left;
+}
+
+body.catalog-page [data-section='process'] .section-hero + div,
+body.erpai-generated-page [data-section='process'] .section-hero + div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 1.25rem);
+}
+
+body.catalog-page [data-section='process'] .loop-step,
+body.erpai-generated-page [data-section='process'] .loop-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.25rem);
+  min-width: 0;
+  overflow: hidden;
+  padding: clamp(1.15rem, 2vw, 1.5rem);
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background: linear-gradient(180deg, hsl(var(--background)), var(--catalog-card-surface));
+  box-shadow: 0 1.25rem 2.75rem -2.45rem hsl(var(--foreground) / 0.55);
+}
+
+body.catalog-page [data-section='process'] .loop-step::before,
+body.erpai-generated-page [data-section='process'] .loop-step::before {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: linear-gradient(180deg, var(--org-on-light), hsl(var(--destructive) / 0.3));
+  content: '';
+}
+
+body.catalog-page [data-section='process'] .loop-step:first-of-type,
+body.erpai-generated-page [data-section='process'] .loop-step:first-of-type {
+  border-top: 1px solid var(--catalog-panel-border);
+}
+
+body.catalog-page [data-section='process'] .loop-step .num,
+body.erpai-generated-page [data-section='process'] .loop-step .num {
+  display: none;
+}
+
+body.catalog-page [data-section='process'] .loop-step .body,
+body.erpai-generated-page [data-section='process'] .loop-step .body {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+  padding-left: 0.15rem;
+}
+
+body.catalog-page [data-section='process'] .loop-step .body h3,
+body.erpai-generated-page [data-section='process'] .loop-step .body h3,
+body.catalog-page [data-section='process'] .loop-step .body h4,
+body.erpai-generated-page [data-section='process'] .loop-step .body h4 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+  font-weight: 760;
+  line-height: 1.08;
+}
+
+body.catalog-page [data-section='process'] .loop-step .body p,
+body.erpai-generated-page [data-section='process'] .loop-step .body p {
+  max-width: 44rem;
+  color: var(--text-m);
+  font-size: clamp(0.94rem, 1vw, 1rem);
+  line-height: 1.55;
+}
+
+body.catalog-page .je-chip,
+body.erpai-generated-page .je-chip {
+  overflow: hidden;
+  border: 1px solid var(--catalog-panel-border);
+  border-radius: 8px;
+  background: var(--catalog-card-surface);
+  box-shadow: none;
+  font-size: 0.82rem;
+}
+
+body.catalog-page [data-section='process'] .je-chip,
+body.erpai-generated-page [data-section='process'] .je-chip {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 0.72rem 0.8rem;
+  border-radius: 6px;
+  background: color-mix(in srgb, hsl(var(--background)) 98%, hsl(var(--foreground)));
+}
+
+body.catalog-page .je-chip .je-hd,
+body.erpai-generated-page .je-chip .je-hd {
+  background: hsl(var(--foreground) / 0.08);
+  color: hsl(var(--foreground));
+  font-size: 0.72rem;
+}
+
+body.catalog-page .je-chip .je-hd .je-tag--muted,
+body.erpai-generated-page .je-chip .je-hd .je-tag--muted {
+  border: 0;
+  color: var(--text-m);
+}
+
+body.catalog-page [data-section='process'] .je-chip .je-hd,
+body.erpai-generated-page [data-section='process'] .je-chip .je-hd {
+  padding: 0;
+  border-bottom: 0;
+  background: transparent;
+  color: hsl(var(--foreground));
+  font-weight: 680;
+  white-space: nowrap;
+}
+
+body.catalog-page [data-section='process'] .je-chip .je-hd .je-tag--muted,
+body.erpai-generated-page [data-section='process'] .je-chip .je-hd .je-tag--muted,
+body.catalog-page [data-section='process'] .je-chip .je-col-hd,
+body.erpai-generated-page [data-section='process'] .je-chip .je-col-hd,
+body.catalog-page [data-section='process'] .je-chip .je-foot,
+body.erpai-generated-page [data-section='process'] .je-chip .je-foot {
+  display: none;
+}
+
+body.catalog-page [data-section='process'] .je-chip .je-grid,
+body.erpai-generated-page [data-section='process'] .je-chip .je-grid {
+  display: block;
+  min-width: 0;
+}
+
+body.catalog-page [data-section='process'] .je-chip .je-col,
+body.erpai-generated-page [data-section='process'] .je-chip .je-col {
+  min-width: 0;
+  padding: 0;
+}
+
+body.catalog-page [data-section='process'] .je-chip .je-row,
+body.erpai-generated-page [data-section='process'] .je-chip .je-row {
+  min-width: 0;
+  overflow: hidden;
+  justify-content: flex-start;
+  color: var(--text-m) !important;
+  font-size: 0.84rem;
+  text-overflow: ellipsis;
+}
+
+body.catalog-page .je-chip .je-col-hd,
+body.erpai-generated-page .je-chip .je-col-hd,
+body.catalog-page .je-chip .je-foot,
+body.erpai-generated-page .je-chip .je-foot {
+  font-size: 0.72rem;
+}
+
+body.catalog-page .mockup,
+body.erpai-generated-page .mockup,
+body.catalog-page .compare-table,
+body.erpai-generated-page .compare-table {
+  max-width: var(--catalog-page-rail);
+}
+
+body.catalog-page .mockup-bar,
+body.erpai-generated-page .mockup-bar,
+body.catalog-page .mockup-status,
+body.erpai-generated-page .mockup-status,
+body.catalog-page .mockup-caption,
+body.erpai-generated-page .mockup-caption,
+body.catalog-page .m-kpi .label,
+body.erpai-generated-page .m-kpi .label {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+body.catalog-page .mockup-caption,
+body.erpai-generated-page .mockup-caption {
+  margin-top: 0.75rem;
+}
+
+body.catalog-page .m-kpi .cell,
+body.erpai-generated-page .m-kpi .cell {
+  padding: clamp(1rem, 2vw, 1.25rem);
+  border-color: var(--catalog-panel-border);
+}
+
+body.catalog-page .m-kpi .value,
+body.erpai-generated-page .m-kpi .value {
+  font-size: clamp(1.55rem, 2.4vw, 2rem);
+  font-weight: 740;
+}
+
+body.catalog-page .m-kpi .sub,
+body.erpai-generated-page .m-kpi .sub {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+body.catalog-page .compare-row,
+body.erpai-generated-page .compare-row {
+  border-color: var(--catalog-panel-border);
+}
+
+body.catalog-page .compare-head .compare-cell,
+body.erpai-generated-page .compare-head .compare-cell {
+  background: hsl(var(--foreground) / 0.08);
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+}
+
+body.catalog-page .compare-head .compare-cell--new,
+body.erpai-generated-page .compare-head .compare-cell--new {
+  background: hsl(var(--destructive) / 0.12);
+  color: var(--org-on-light);
+}
+
+body.catalog-page .compare-cell,
+body.erpai-generated-page .compare-cell {
+  border-color: var(--catalog-panel-border);
+  font-size: 0.92rem;
+}
+
+body.catalog-page .compare-cell--label,
+body.erpai-generated-page .compare-cell--label {
+  font-size: 0.84rem;
+}
+
+body.catalog-page details.faq-item,
+body.erpai-generated-page details.faq-item {
+  border-color: var(--catalog-panel-border);
+}
+
+body.catalog-page details.faq-item summary,
+body.erpai-generated-page details.faq-item summary {
+  color: hsl(var(--foreground));
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+body.catalog-page [data-section='relatedApps'] > div:first-child,
+body.erpai-generated-page [data-section='relatedApps'] > div:first-child {
+  padding-bottom: 1.5rem !important;
+}
+
+body.catalog-page .related-grid,
+body.erpai-generated-page .related-grid {
+  display: flex;
+  gap: 0.9rem !important;
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail);
+  margin: 0 auto !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  border: 0;
+  background: transparent !important;
+  padding: 0 0 1rem !important;
+  scroll-snap-type: x mandatory;
+}
+
+body.catalog-page .related-card,
+body.erpai-generated-page .related-card,
+body.catalog-page .contributor-app-card,
+body.erpai-generated-page .contributor-app-card {
+  position: relative;
+  display: flex;
+  flex: 0 0 clamp(17.5rem, 30vw, 26.875rem) !important;
+  width: clamp(17.5rem, 30vw, 26.875rem) !important;
+  height: auto !important;
+  aspect-ratio: 430 / 242;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background: var(--card-bg, hsl(var(--foreground))) !important;
+  color: var(--card-fg, hsl(var(--primary-foreground)));
+  container-type: inline-size;
+  padding: 0 !important;
+  text-align: left;
+  text-decoration: none;
+  scroll-snap-align: start;
+  transform: translateZ(0);
+  transform-origin: center center;
+  transition:
+    filter 260ms var(--ease-standard),
+    box-shadow 260ms var(--ease-standard),
+    transform 420ms var(--ease-signature);
+}
+
+body.catalog-page .related-card:hover,
+body.erpai-generated-page .related-card:hover,
+body.catalog-page .related-card:focus-visible,
+body.erpai-generated-page .related-card:focus-visible,
+body.catalog-page .contributor-app-card:hover,
+body.erpai-generated-page .contributor-app-card:hover,
+body.catalog-page .contributor-app-card:focus-visible,
+body.erpai-generated-page .contributor-app-card:focus-visible {
+  filter: brightness(1.05) saturate(1.03);
+  box-shadow:
+    0 22px 70px rgb(0 0 0 / 28%),
+    inset 0 0 0 1px rgb(255 255 255 / 34%);
+  transform: translateY(-3px) scale(1.018);
+}
+
+body.catalog-page .related-card::after,
+body.erpai-generated-page .related-card::after,
+body.catalog-page .contributor-app-card::after,
+body.erpai-generated-page .contributor-app-card::after {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block !important;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 2%) 0%, rgb(0 0 0 / 12%) 42%, rgb(0 0 0 / 62%) 100%),
+    linear-gradient(90deg, rgb(0 0 0 / 16%) 0%, rgb(0 0 0 / 0%) 58%);
+  content: '' !important;
+  pointer-events: none;
+}
+
+body.catalog-page .related-card .catalog-card-media,
+body.erpai-generated-page .related-card .catalog-card-media,
+body.catalog-page .related-card .catalog-card-media-scrim,
+body.erpai-generated-page .related-card .catalog-card-media-scrim,
+body.catalog-page .related-card .contributor-card-pattern,
+body.erpai-generated-page .related-card .contributor-card-pattern,
+body.catalog-page .contributor-app-card .catalog-card-media,
+body.erpai-generated-page .contributor-app-card .catalog-card-media,
+body.catalog-page .contributor-app-card .catalog-card-media-scrim,
+body.erpai-generated-page .contributor-app-card .catalog-card-media-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+body.catalog-page .related-card .catalog-card-media,
+body.erpai-generated-page .related-card .catalog-card-media,
+body.catalog-page .contributor-app-card .catalog-card-media,
+body.erpai-generated-page .contributor-app-card .catalog-card-media {
+  display: block !important;
+  background-position: center;
+  background-size: cover;
+  opacity: 1 !important;
+  transform: scale(1.04);
+  filter: saturate(1.08) contrast(1.12) brightness(0.94);
+  transition: transform 720ms var(--ease-signature);
+}
+
+body.catalog-page .related-card:hover .catalog-card-media,
+body.erpai-generated-page .related-card:hover .catalog-card-media,
+body.catalog-page .related-card:focus-visible .catalog-card-media,
+body.erpai-generated-page .related-card:focus-visible .catalog-card-media,
+body.catalog-page .contributor-app-card:hover .catalog-card-media,
+body.erpai-generated-page .contributor-app-card:hover .catalog-card-media,
+body.catalog-page .contributor-app-card:focus-visible .catalog-card-media,
+body.erpai-generated-page .contributor-app-card:focus-visible .catalog-card-media {
+  transform: scale(1.1);
+}
+
+body.catalog-page .related-card .catalog-card-media img,
+body.erpai-generated-page .related-card .catalog-card-media img,
+body.catalog-page .contributor-app-card .catalog-card-media img,
+body.erpai-generated-page .contributor-app-card .catalog-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body.catalog-page .related-card .catalog-card-media-scrim,
+body.erpai-generated-page .related-card .catalog-card-media-scrim,
+body.catalog-page .contributor-app-card .catalog-card-media-scrim,
+body.erpai-generated-page .contributor-app-card .catalog-card-media-scrim {
+  display: block !important;
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 14%) 0%,
+    rgb(0 0 0 / 24%) 48%,
+    rgb(0 0 0 / 58%) 100%
+  ) !important;
+}
+
+body.catalog-page .related-card .contributor-card-pattern,
+body.erpai-generated-page .related-card .contributor-card-pattern,
+body.catalog-page .contributor-app-card .contributor-card-pattern,
+body.erpai-generated-page .contributor-app-card .contributor-card-pattern {
+  display: block !important;
+  z-index: 2;
+  color: hsl(var(--primary-foreground));
+  mix-blend-mode: overlay;
+  opacity: 0.05 !important;
+}
+
+body.catalog-page .related-card .catalog-card-badge,
+body.erpai-generated-page .related-card .catalog-card-badge,
+body.catalog-page .contributor-app-card .catalog-card-badge,
+body.erpai-generated-page .contributor-app-card .catalog-card-badge {
+  position: absolute;
+  top: clamp(0.7rem, 0.9vw, 0.9rem);
+  left: clamp(0.75rem, 1vw, 1rem);
+  z-index: 10;
+  max-width: calc(100% - clamp(1.5rem, 2vw, 2rem));
+  border: 0;
+  border-radius: 2px;
+  background: var(--red);
+  color: white;
+  padding: 4px 8px;
+  font-family: var(--font-body);
+  font-size: 0.75rem !important;
+  font-weight: 800;
+  line-height: 1;
+}
+
+body.catalog-page .related-card .catalog-card__content,
+body.erpai-generated-page .related-card .catalog-card__content,
+body.catalog-page .contributor-app-card .catalog-card__content,
+body.erpai-generated-page .contributor-app-card .catalog-card__content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.28rem;
+  margin-top: auto !important;
+  padding: clamp(0.75rem, 1vw, 1rem);
+  padding-top: clamp(2.4rem, 3vw, 3rem);
+  color: white;
+  pointer-events: none;
+  text-shadow: 0 2px 14px rgb(0 0 0 / 62%);
+}
+
+body.catalog-page .related-card .catalog-card__title,
+body.erpai-generated-page .related-card .catalog-card__title,
+body.catalog-page .contributor-app-card .catalog-card__title,
+body.erpai-generated-page .contributor-app-card .catalog-card__title {
+  display: -webkit-box;
+  overflow: hidden;
+  color: white;
+  font-family: var(--font-display);
+  font-size: clamp(1.12rem, 7.25cqw, 1.85rem) !important;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.92;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body.catalog-page .related-card .catalog-card__desc,
+body.erpai-generated-page .related-card .catalog-card__desc,
+body.catalog-page .contributor-app-card .catalog-card__desc,
+body.erpai-generated-page .contributor-app-card .catalog-card__desc {
+  display: -webkit-box;
+  overflow: hidden;
+  color: rgb(255 255 255 / 82%);
+  font-family: var(--font-body);
+  font-size: clamp(0.72rem, 0.72vw, 0.8rem) !important;
+  font-weight: 550;
+  line-height: 1.25 !important;
+  opacity: 1 !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+body.catalog-page #cta,
+body.erpai-generated-page #cta {
+  border-top: 1px solid var(--catalog-panel-border) !important;
+  background:
+    radial-gradient(circle at 14% 0%, hsl(var(--destructive) / 0.12), transparent 34rem),
+    linear-gradient(180deg, color-mix(in srgb, hsl(var(--background)), hsl(var(--card)) 34%), hsl(var(--background))) !important;
+  color: hsl(var(--foreground)) !important;
+  padding-block: clamp(4rem, 8vw, 7rem) !important;
+}
+
+body.catalog-page #cta > div,
+body.erpai-generated-page #cta > div {
+  display: grid;
+  width: var(--catalog-page-rail);
+  max-width: var(--catalog-page-rail) !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-inline: auto !important;
+  padding-inline: 0 !important;
+  text-align: left !important;
+}
+
+body.catalog-page #cta .inline-flex:not(.btn),
+body.erpai-generated-page #cta .inline-flex:not(.btn),
+body.catalog-page #cta p.font-mono,
+body.erpai-generated-page #cta p.font-mono {
+  display: none !important;
+}
+
+body.catalog-page #cta h2,
+body.erpai-generated-page #cta h2 {
+  max-width: 16ch;
+  margin: 0 !important;
+  color: hsl(var(--foreground)) !important;
+  font-size: clamp(2.2rem, 4.8vw, 4.4rem) !important;
+  letter-spacing: -0.045em !important;
+  line-height: 0.94 !important;
+  text-transform: none !important;
+}
+
+body.catalog-page #cta h2 span[style],
+body.erpai-generated-page #cta h2 span[style] {
+  color: var(--org-on-light) !important;
+}
+
+body.catalog-page #cta p,
+body.erpai-generated-page #cta p {
+  max-width: 58ch !important;
+  margin: 1.1rem 0 0 !important;
+  color: var(--text-m) !important;
+  font-size: clamp(1rem, 1.35vw, 1.15rem) !important;
+  line-height: 1.62 !important;
+  text-align: left !important;
+}
+
+body.catalog-page #cta .btn,
+body.erpai-generated-page #cta .btn {
+  width: fit-content;
+  min-width: 9rem;
+  align-self: end;
+  white-space: nowrap;
+}
+
+body.catalog-page #cta .flex.flex-stack,
+body.erpai-generated-page #cta .flex.flex-stack {
+  grid-column: 2;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  flex-direction: row !important;
+  gap: 1rem !important;
+  margin-top: 0.35rem;
+}
+
+body.catalog-page #cta .flex.flex-stack a:not(.btn),
+body.erpai-generated-page #cta .flex.flex-stack a:not(.btn) {
+  color: var(--text-m) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.92rem !important;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+body.catalog-page #cta [data-cta-chip-copy],
+body.erpai-generated-page #cta [data-cta-chip-copy],
+body.catalog-page #cta [data-cta-heading-main],
+body.erpai-generated-page #cta [data-cta-heading-main],
+body.catalog-page #cta [data-hero-primary-cta],
+body.erpai-generated-page #cta [data-hero-primary-cta],
+body.catalog-page #cta [data-copy-key='ctaPricing'],
+body.erpai-generated-page #cta [data-copy-key='ctaPricing'] {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+@media (max-width: 1279px) {
+  body.catalog-page .proto-nav__bar,
+  body.erpai-generated-page .proto-nav__bar {
+    width: min(calc(100% - 2rem), 34rem) !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  body.catalog-page .catalog-hero-shell,
+  body.erpai-generated-page .catalog-hero-shell {
+    grid-template-columns: 1fr;
+  }
+
+  body.catalog-page .catalog-sidebar-shell,
+  body.erpai-generated-page .catalog-sidebar-shell {
+    padding-top: 0;
+  }
+
+  body.catalog-page .app-stats,
+  body.erpai-generated-page .app-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  body.catalog-page .app-stat:nth-child(2n),
+  body.erpai-generated-page .app-stat:nth-child(2n) {
+    border-right: 0;
+  }
+
+  body.catalog-page .app-stat:nth-child(n + 3),
+  body.erpai-generated-page .app-stat:nth-child(n + 3) {
+    border-top: 1px solid var(--catalog-panel-border);
+  }
+}
+
+@media (max-width: 760px) {
+  body.catalog-page,
+  body.erpai-generated-page {
+    --catalog-page-rail: min(calc(100% - 2rem), 86rem);
+  }
+
+  body.catalog-page .proto-nav,
+  body.erpai-generated-page .proto-nav {
+    padding-inline: 0.75rem;
+  }
+
+  body.catalog-page .proto-nav__bar,
+  body.erpai-generated-page .proto-nav__bar {
+    width: 100% !important;
+    min-height: 3.5rem !important;
+    padding-inline: 0.6rem !important;
+  }
+
+  body.catalog-page .proto-nav__desktop,
+  body.erpai-generated-page .proto-nav__desktop,
+  body.catalog-page .proto-nav__action,
+  body.erpai-generated-page .proto-nav__action {
+    display: none;
+  }
+
+  body.catalog-page .proto-nav__menu-button,
+  body.erpai-generated-page .proto-nav__menu-button {
+    display: inline-flex;
+  }
+
+  body.catalog-page .app-h1,
+  body.erpai-generated-page .app-h1,
+  body.catalog-page .app-h1.app-h1--tight,
+  body.erpai-generated-page .app-h1.app-h1--tight {
+    font-size: clamp(2.75rem, 16vw, 4.75rem);
+  }
+
+  body.catalog-page .app-hero-copy,
+  body.erpai-generated-page .app-hero-copy {
+    padding-top: 2.25rem;
+  }
+
+  body.catalog-page .app-hero-cta,
+  body.erpai-generated-page .app-hero-cta {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  body.catalog-page .app-hero-cta .btn,
+  body.erpai-generated-page .app-hero-cta .btn,
+  body.catalog-page .hero-secondary,
+  body.erpai-generated-page .hero-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  body.catalog-page .catalog-hero-shell,
+  body.erpai-generated-page .catalog-hero-shell {
+    padding-bottom: 2.5rem;
+  }
+
+  body.catalog-page .app-stats,
+  body.erpai-generated-page .app-stats {
+    grid-template-columns: 1fr;
+  }
+
+  body.catalog-page .app-stat,
+  body.erpai-generated-page .app-stat,
+  body.catalog-page .app-stat:nth-child(2n),
+  body.erpai-generated-page .app-stat:nth-child(2n) {
+    border-right: 0;
+  }
+
+  body.catalog-page .app-stat:nth-child(n + 2),
+  body.erpai-generated-page .app-stat:nth-child(n + 2) {
+    border-top: 1px solid var(--catalog-panel-border);
+  }
+
+  body.catalog-page .loop-step,
+  body.erpai-generated-page .loop-step,
+  body.catalog-page [data-section='process'] .section-hero + div,
+  body.erpai-generated-page [data-section='process'] .section-hero + div {
+    grid-template-columns: 1fr;
+  }
+
+  body.catalog-page [data-section='process'] .loop-step,
+  body.erpai-generated-page [data-section='process'] .loop-step {
+    gap: 1rem;
+    padding: 1.1rem;
+  }
+
+  body.catalog-page .loop-step .je-chip,
+  body.erpai-generated-page .loop-step .je-chip {
+    grid-column: 1 / -1;
+    max-width: 100%;
+  }
+
+  body.catalog-page .related-card,
+  body.erpai-generated-page .related-card,
+  body.catalog-page .contributor-app-card,
+  body.erpai-generated-page .contributor-app-card {
+    height: 15rem !important;
+    flex-basis: min(84vw, 19rem) !important;
+    width: min(84vw, 19rem) !important;
+  }
+
+  body.catalog-page #cta > div,
+  body.erpai-generated-page #cta > div {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  body.catalog-page #cta .flex.flex-stack,
+  body.erpai-generated-page #cta .flex.flex-stack {
+    grid-column: 1;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+  }
+
+  body.catalog-page #cta .btn,
+  body.erpai-generated-page #cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.catalog-page .proto-nav__bar,
+  body.erpai-generated-page .proto-nav__bar,
+  body.catalog-page .related-card,
+  body.erpai-generated-page .related-card,
+  body.catalog-page .contributor-app-card,
+  body.erpai-generated-page .contributor-app-card,
+  body.catalog-page .catalog-card-media,
+  body.erpai-generated-page .catalog-card-media {
+    transition: none;
+  }
+}
