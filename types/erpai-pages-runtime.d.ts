@@ -26,6 +26,8 @@ export interface ErpaiBootConfig {
   branchId?: string;
   orgName?: string;
   appName?: string;
+  /** ISO-4217 base currency configured for the current app. */
+  currency?: string;
   appRouteBase?: string;
   routeBase?: string;
   pageSlug?: string;

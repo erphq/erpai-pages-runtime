@@ -316,6 +316,7 @@ function makeSandbox() {
 // ── Run ──────────────────────────────────────────────────────────────────────
 const src = fs.readFileSync(RUNTIME_PATH, 'utf-8');
 const sandbox = makeSandbox();
+sandbox.ERPAI.currency = 'USD';
 vm.createContext(sandbox);
 
 try {
@@ -540,6 +541,45 @@ check('compactNumber(NaN)', () => erpai.compactNumber(NaN), '');
 check('fmt$(1234)', () => erpai.fmt$(1234), '$1,234');
 check('fmtPct(42)', () => erpai.fmtPct(42), '42%');
 check('fmtNum(1234567)', () => erpai.fmtNum(1234567), '1,234,567');
+
+const inrSandbox = makeSandbox();
+inrSandbox.ERPAI.currency = 'INR';
+vm.createContext(inrSandbox);
+vm.runInContext(src, inrSandbox);
+check(
+  'fmt$(1234) uses the configured app currency',
+  () => inrSandbox.erpai.fmt$(1234),
+  '₹1,234',
+);
+
+const euroSandbox = makeSandbox();
+euroSandbox.ERPAI.currency = 'eur';
+vm.createContext(euroSandbox);
+vm.runInContext(src, euroSandbox);
+check(
+  'fmt$ normalizes lowercase currency codes',
+  () => euroSandbox.erpai.fmt$(1234),
+  '€1,234',
+);
+
+const fallbackCurrencySandbox = makeSandbox();
+fallbackCurrencySandbox.ERPAI.currency = 'invalid';
+vm.createContext(fallbackCurrencySandbox);
+vm.runInContext(src, fallbackCurrencySandbox);
+check(
+  'fmt$ falls back safely for invalid currency codes',
+  () => fallbackCurrencySandbox.erpai.fmt$(1234),
+  '$1,234',
+);
+
+const legacyCurrencySandbox = makeSandbox();
+vm.createContext(legacyCurrencySandbox);
+vm.runInContext(src, legacyCurrencySandbox);
+check(
+  'fmt$ preserves USD for hosts that do not inject currency yet',
+  () => legacyCurrencySandbox.erpai.fmt$(-1234),
+  '-$1,234',
+);
 check('esc("<a>&")', () => erpai.esc('<a>&'), '&lt;a&gt;&amp;');
 
 // selectName: 1-based index into options
