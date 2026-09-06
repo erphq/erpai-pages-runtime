@@ -214,6 +214,7 @@
   const PAGE_ID = cfg.pageId || '';
   const ORG_NAME = cfg.orgName;
   const APP_NAME = cfg.appName;
+  const APP_CURRENCY = typeof cfg.currency === 'string' ? cfg.currency.trim().toUpperCase() : '';
   const APP_ROUTE_BASE = cfg.appRouteBase || cfg.routeBase || '';
   const THEME = cfg.theme;
 
@@ -1157,9 +1158,25 @@
     return d.innerHTML;
   }
 
-  /** Format currency: $1,234 */
+  /** Format currency using the host app's configured ISO-4217 code. */
   function fmt$(n) {
-    return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    var value = Number(n || 0);
+    var currency = APP_CURRENCY || 'USD';
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    } catch (_) {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    }
   }
 
   /** Format percentage: 42% */
